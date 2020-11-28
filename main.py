@@ -4,7 +4,8 @@ import numpy as np
 
 H = 480
 W = 854
-F=1
+F=200
+#1540 check if square of 2/2
 K = np.array([[F,0,W//2],[0,F,H//2],[0,0,1]])
 
 def print_hi(name):

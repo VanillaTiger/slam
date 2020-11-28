@@ -8,6 +8,8 @@ from skimage.transform import EssentialMatrixTransform
 def add_ones(x):
     return np.concatenate([x, np.ones((x.shape[0],1))], axis=1)
 
+f_est_avg = []
+
 class Extractor(object):
     def __init__(self, K):
         self.orb = cv2.ORB_create()
@@ -57,12 +59,17 @@ class Extractor(object):
             # ret[:, :, 1] -= frame.shape[1] //2
 
             model, inliers = ransac((ret[:, 0], ret[:, 1]),
-                                    FundamentalMatrixTransform,
+                                    # FundamentalMatrixTransform,
+                                    EssentialMatrixTransform,
                                     min_samples=8,
-                                    residual_threshold=0.5,
+                                    # residual_threshold=0.5,
+                                    residual_threshold=0.005,
                                     max_trials=100)
+            # print(sum(inliers),len(inliers))
             ret = ret[inliers]
 
+            s,v,d = np.linalg.svd(model.params)
+            # print(v)
 
         # return
         self.last = {'kps': kps, 'des': des}
